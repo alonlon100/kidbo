@@ -1,53 +1,241 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html dir="rtl" lang="he">
 
 <head>
 
 <meta charset="UTF-8">
 
-<title>האתר</title>
+<title>אתר</title>
 
 <link rel="stylesheet" href="style.css">
 
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Gveret+Levin&display=swap" rel="stylesheet">
+
 <script type="module" src="firebase.js"></script>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Varela Round;
+
+background:black;
+
+}
+
+
+.side{
+
+position:fixed;
+top:0;
+bottom:0;
+width:200px;
+
+background-size:200px;
+
+background-repeat:repeat;
+
+z-index:-1;
+
+}
+
+
+#left{
+
+left:0;
+
+}
+
+
+#right{
+
+right:0;
+
+}
+
+
+.main{
+
+width:700px;
+margin:auto;
+background:white;
+min-height:100vh;
+padding:20px;
+
+}
+
+
+h1{
+
+font-family:Gveret Levin;
+color:#00a9ff;
+
+}
+
+
+button{
+
+background:#00a9ff;
+color:white;
+border:none;
+padding:10px;
+margin:5px;
+cursor:pointer;
+
+}
+
+</style>
 
 </head>
 
 <body>
 
-<div id="site"></div>
+
+<div id="left" class="side"></div>
+
+<div id="right" class="side"></div>
+
+
+<div class="main">
+
+<h1 id="title"></h1>
+
+<div id="content"></div>
+
+
+<hr>
+
+תגובות
+
+<br>
+
+<input id="comment">
+
+<button onclick="addComment()">שלח</button>
+
+<div id="comments"></div>
+
+
+<br>
+
+<button onclick="back()">
+חזרה לעורך
+</button>
+
+</div>
+
+
 
 <script type="module">
 
 import {
+
 db,
 doc,
-getDoc
+getDoc,
+setDoc,
+collection,
+getDocs
+
 } from "./firebase.js";
 
-const ref = doc(db, "site", "main");
 
-async function load() {
+let params = new URLSearchParams(location.search);
 
-const snap = await getDoc(ref);
+let user = params.get("u");
 
-if (snap.exists()) {
+
+const ref = doc(db,"sites",user);
+
+
+async function load(){
+
+let snap = await getDoc(ref);
+
+if(!snap.exists()) return;
+
 
 let data = snap.data();
 
-site.innerHTML =
-"<div style='background:url(" + data.bg + ")'>" +
-"<h1>" + data.name + "</h1>" +
-data.html +
-"</div>";
+
+title.innerText = data.name;
+
+content.innerHTML = data.html;
+
+
+left.style.backgroundImage =
+"url("+data.bg+")";
+
+right.style.backgroundImage =
+"url("+data.bg+")";
+
+
+loadComments();
 
 }
 
-}
 
 load();
+
+
+
+const comRef = collection(db,"comments",user,"list");
+
+
+async function loadComments(){
+
+comments.innerHTML="";
+
+let q = await getDocs(comRef);
+
+q.forEach(d=>{
+
+let div=document.createElement("div");
+
+div.innerText=d.data().text;
+
+comments.appendChild(div);
+
+});
+
+}
+
+
+
+window.addComment = async function(){
+
+await setDoc(
+
+doc(comRef,Date.now().toString()),
+
+{
+
+text:comment.value
+
+}
+
+);
+
+comment.value="";
+
+loadComments();
+
+};
+
+
+
+window.back=function(){
+
+if(localStorage.user==user)
+
+location="editor.html";
+
+};
+
 
 </script>
 
 </body>
+
 </html>
