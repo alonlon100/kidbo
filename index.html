@@ -11,61 +11,47 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Gveret+Levin&display=swap" rel="stylesheet">
 
-<script type="module" src="firebase.js"></script>
-
 <style>
 
 body{
-
 font-family:Varela Round;
 text-align:center;
 
 background:url(https://i.ibb.co/nMmWgCMg/atar.png);
 background-repeat:repeat;
 animation:bg 20s linear infinite;
-
 }
 
 @keyframes bg{
-
 from{background-position:0 0}
 to{background-position:500px 0}
-
 }
 
 .main{
-
 background:white;
 width:600px;
 margin:auto;
 padding:20px;
-
 }
 
 h1{
-
 font-family:Gveret Levin;
 color:#00a9ff;
-
 }
 
 button{
-
 background:#00a9ff;
 color:white;
 border:none;
 padding:10px;
 margin:5px;
 cursor:pointer;
-
 }
 
 .box{
-
 border:1px solid #ccc;
 padding:10px;
 margin:10px;
-
 }
 
 </style>
@@ -89,11 +75,11 @@ margin:10px;
 
 <br>
 
-<input id="regUser" placeholder="שם משתמש">
+<input id="regUser">
 
 <br>
 
-<input id="regPass" placeholder="סיסמה">
+<input id="regPass">
 
 <br>
 
@@ -136,6 +122,7 @@ margin:10px;
 </div>
 
 
+
 <div class="box">
 
 התחברות הנהלה
@@ -161,7 +148,6 @@ margin:10px;
 <script type="module">
 
 import {
-
 db,
 doc,
 setDoc,
@@ -169,119 +155,11 @@ getDoc,
 collection,
 getDocs,
 deleteDoc
-
 } from "./firebase.js";
 
 
 
 window.register = async function(){
-
-let u=regUser.value;
-let p=regPass.value;
-
-await setDoc(
-doc(db,"users",u),
-{password:p}
-);
-
-alert("נרשמת");
-
-localStorage.user=u;
-
-location="editor.html";
-
-};
-
-
-
-window.register = async function(){
-
-let u = regUser.value.trim();
-let p = regPass.value.trim();
-
-if(!u || !p){
-alert("צריך שם וסיסמה");
-return;
-}
-
-await setDoc(
-doc(db,"users",u),
-{password:p}
-);
-
-localStorage.setItem("user",u);
-
-alert("נרשמת בהצלחה");
-
-location.href = "editor.html";
-
-};
-
-
-
-async function loadSites(){
-
-sites.innerHTML="";
-
-let q = await getDocs(
-collection(db,"sites")
-);
-
-q.forEach(d=>{
-
-let div=document.createElement("div");
-
-let u=d.id;
-
-div.innerHTML=
-
-d.data().name+
-
-" <button>כניסה</button>";
-
-div.querySelector("button")
-.onclick=()=>{
-
-location=
-"site.html?u="+u;
-
-};
-
-if(localStorage.admin){
-
-let del=document.createElement("button");
-
-del.innerText="מחק";
-
-del.onclick=async()=>{
-
-await deleteDoc(
-doc(db,"sites",u)
-);
-
-await deleteDoc(
-doc(db,"users",u)
-);
-
-loadSites();
-
-};
-
-div.appendChild(del);
-
-}
-
-sites.appendChild(div);
-
-});
-
-}
-
-loadSites();
-
-
-
-  window.register = async function(){
 
 let u = document.getElementById("regUser").value.trim();
 let p = document.getElementById("regPass").value.trim();
@@ -298,9 +176,9 @@ doc(db,"users",u),
 
 localStorage.setItem("user",u);
 
-alert("נרשמת בהצלחה");
+alert("נרשמת");
 
-location.href = "editor.html";
+location.href="editor.html";
 
 };
 
@@ -311,11 +189,12 @@ window.login = async function(){
 let u = document.getElementById("logUser").value.trim();
 let p = document.getElementById("logPass").value.trim();
 
-let snap =
-await getDoc(doc(db,"users",u));
+let snap = await getDoc(
+doc(db,"users",u)
+);
 
 if(!snap.exists()){
-alert("משתמש לא קיים");
+alert("לא קיים");
 return;
 }
 
@@ -326,9 +205,88 @@ return;
 
 localStorage.setItem("user",u);
 
-location.href = "editor.html";
+location.href="editor.html";
 
 };
+
+
+
+window.adminLogin=function(){
+
+if(adminPass.value=="אלון666"){
+
+localStorage.admin="yes";
+
+alert("מנהל");
+
+loadSites();
+
+}
+
+};
+
+
+
+window.logout=function(){
+
+localStorage.clear();
+
+location.reload();
+
+};
+
+
+
+async function loadSites(){
+
+sites.innerHTML="";
+
+let q = await getDocs(
+collection(db,"sites")
+);
+
+q.forEach(d=>{
+
+let u=d.id;
+
+let div=document.createElement("div");
+
+div.innerHTML=
+d.data().name+
+" <button>כניסה</button>";
+
+div.querySelector("button").onclick=()=>{
+
+location="site.html?u="+u;
+
+};
+
+if(localStorage.admin){
+
+let del=document.createElement("button");
+
+del.innerText="מחק";
+
+del.onclick=async()=>{
+
+await deleteDoc(doc(db,"sites",u));
+await deleteDoc(doc(db,"users",u));
+
+loadSites();
+
+};
+
+div.appendChild(del);
+
+}
+
+sites.appendChild(div);
+
+});
+
+}
+
+loadSites();
 
 </script>
 
