@@ -1,0 +1,67 @@
+body{
+margin:0;
+font-family:'Varela Round', sans-serif;
+text-align:center;
+overflow-x:hidden;
+}
+
+/* רקע זז */
+
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:200%;
+height:100%;
+background:url("https://i.ibb.co/nMmWgCMg/atar.png");
+background-repeat:repeat;
+animation:bgmove 20s linear infinite;
+z-index:-1;
+}
+
+@keyframes bgmove{
+0%{transform:translateX(0);}
+100%{transform:translateX(-50%);}
+}
+
+
+.main{
+
+width:900px;
+margin:auto;
+background:white;
+margin-top:40px;
+padding:20px;
+border-radius:20px;
+
+}
+
+
+h1,h2,h3{
+color:#00a9ff;
+}
+
+
+button{
+
+background:#00a9ff;
+color:white;
+border:none;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+
+}
+
+
+.box{
+
+border:2px solid #00a9ff;
+padding:10px;
+margin:10px;
+display:inline-block;
+width:250px;
+vertical-align:top;
+
+}

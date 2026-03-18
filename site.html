@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>אתר</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+<div class="main">
+
+<div id="site"></div>
+
+<hr>
+
+<h3>תגובות</h3>
+
+<div id="comments"></div>
+
+<input id="cText">
+
+<button onclick="send()">שלח</button>
+
+<br><br>
+
+<button onclick="back()">חזרה לעורך</button>
+
+</div>
+
+
+<script type="module">
+
+
+import {
+
+db,
+collection,
+doc,
+getDoc,
+getDocs,
+addDoc,
+deleteDoc
+
+}
+from "./firebase.js";
+
+
+let params=new URLSearchParams(location.search);
+
+let id=params.get("id");
+
+let user=localStorage.user;
+
+let admin=false;
+
+
+
+if(user=="אלון"){
+admin=true;
+}
+
+
+
+async function loadSite(){
+
+let snap=await getDoc(doc(db,"sites",id));
+
+let s=snap.data();
+
+site.innerHTML=
+
+"<div style='background:url("+s.bg+")'>"
+
++ s.html +
+
+"</div>";
+
+}
+
+
+async function loadComments(){
+
+comments.innerHTML="";
+
+let q=await getDocs(collection(db,"comments"));
+
+q.forEach(d=>{
+
+let c=d.data();
+
+if(c.site!=id) return;
+
+let div=document.createElement("div");
+
+div.innerHTML=c.user+" : "+c.text;
+
+if(admin){
+
+let b=document.createElement("button");
+
+b.innerText="מחק";
+
+b.onclick=async()=>{
+
+await deleteDoc(doc(db,"comments",d.id));
+
+loadComments();
+
+};
+
+div.appendChild(b);
+
+}
+
+comments.appendChild(div);
+
+});
+
+}
+
+
+window.send=async function(){
+
+if(!user) return;
+
+await addDoc(collection(db,"comments"),{
+
+site:id,
+user:user,
+text:cText.value
+
+});
+
+cText.value="";
+
+loadComments();
+
+}
+
+
+window.back=function(){
+
+location="editor.html";
+
+}
+
+
+loadSite();
+
+loadComments();
+
+
+</script>
+
+
+</body>
+</html>

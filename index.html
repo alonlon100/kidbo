@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>קידבו - מערכת חינמית לבניית אתרים לילדים</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Gveret+Levin&display=swap" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+<div class="main">
+
+
+<img src="https://i.ibb.co/pjg57JfN/logo-2.png" width="200">
+
+
+<h1>קידבו - מערכת חינמית לבניית אתרים לילדים</h1>
+
+
+
+<div class="box">
+
+<h3>הרשמה</h3>
+
+<input id="regUser" placeholder="שם משתמש"><br>
+
+<input id="regPass" type="password" placeholder="סיסמה"><br>
+
+<button onclick="register()">הרשמה</button>
+
+</div>
+
+
+
+<div class="box">
+
+<h3>התחברות</h3>
+
+<input id="logUser"><br>
+
+<input id="logPass" type="password"><br>
+
+<button onclick="login()">התחברות</button>
+
+</div>
+
+
+
+<div class="box">
+
+<h3>אתרים שנבנו</h3>
+
+<div id="sites"></div>
+
+</div>
+
+
+<br>
+
+<button onclick="adminLogin()">התחברות הנהלה</button>
+
+<button onclick="logout()">ניתוק</button>
+
+
+</div>
+
+
+<script type="module">
+
+
+import {
+db,
+collection,
+doc,
+setDoc,
+getDoc,
+getDocs
+}
+from "./firebase.js";
+
+
+let currentUser=null;
+let admin=false;
+
+
+
+window.register = async function(){
+
+let u=regUser.value;
+let p=regPass.value;
+
+if(u.length>10 || p.length>10){
+alert("עד 10 תווים");
+return;
+}
+
+await setDoc(doc(db,"users",u),{
+password:p
+});
+
+alert("נרשמת");
+
+currentUser=u;
+
+location="editor.html";
+
+}
+
+
+
+window.login = async function(){
+
+let u=logUser.value;
+let p=logPass.value;
+
+let ref=doc(db,"users",u);
+
+let snap=await getDoc(ref);
+
+if(!snap.exists()){
+alert("לא קיים");
+return;
+}
+
+if(snap.data().password!=p){
+alert("סיסמה שגויה");
+return;
+}
+
+currentUser=u;
+
+localStorage.user=u;
+
+location="editor.html";
+
+}
+
+
+
+window.adminLogin=function(){
+
+let c=prompt("קוד");
+
+if(c=="אלון666"){
+admin=true;
+alert("מנהל");
+}
+
+}
+
+
+
+window.logout=function(){
+
+localStorage.clear();
+
+}
+
+
+
+async function loadSites(){
+
+let q=await getDocs(collection(db,"sites"));
+
+sites.innerHTML="";
+
+q.forEach(d=>{
+
+let s=d.data();
+
+let b=document.createElement("button");
+
+b.innerText=s.name;
+
+b.onclick=()=>{
+
+location="site.html?id="+d.id;
+
+};
+
+sites.appendChild(b);
+
+});
+
+}
+
+loadSites();
+
+
+</script>
+
+
+</body>
+</html>

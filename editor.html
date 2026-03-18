@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>עורך האתר</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+<div class="main">
+
+<h2>עורך האתר האישי</h2>
+
+
+שם האתר:<br>
+
+<input id="siteName"><br><br>
+
+
+
+<button onclick="bold()">מודגש</button>
+<button onclick="italic()">נטוי</button>
+<button onclick="center()">מרכוז</button>
+<button onclick="big()">כותרת</button>
+<button onclick="img()">תמונה</button>
+
+
+<br><br>
+
+
+<textarea id="html" style="width:100%;height:200px"></textarea>
+
+
+<br><br>
+
+
+רקע:
+
+<select id="bg">
+
+<option value="">ללא</option>
+
+<option value="https://i.ibb.co/4wXF4Jh5/514971w649bnc4h7.gif">1</option>
+
+<option value="https://i.ibb.co/xKSFXQ6p/1028701nidgo5cnnh.gif">2</option>
+
+<option value="https://i.ibb.co/GQRtGjbP/1301959bqir6wvcvv.gif">3</option>
+
+<option value="https://i.ibb.co/VpWKtQ9z/1254492hl9oznlwgq.gif">4</option>
+
+<option value="https://i.ibb.co/v4YFzCGH/1253900io7iftppfb.gif">5</option>
+
+</select>
+
+
+<br><br>
+
+
+<button onclick="save()">שמירה</button>
+
+<button onclick="openSite()">מעבר לאתר</button>
+
+
+<h3>תצוגה מקדימה</h3>
+
+<div id="preview" style="border:1px solid #ccc;min-height:200px"></div>
+
+
+</div>
+
+
+
+<script type="module">
+
+
+import {
+
+db,
+collection,
+doc,
+setDoc,
+getDoc
+
+}
+from "./firebase.js";
+
+
+let user=localStorage.user;
+
+if(!user){
+
+location="index.html";
+
+}
+
+
+html.oninput=update;
+bg.onchange=update;
+
+
+
+function update(){
+
+preview.innerHTML=
+
+"<div style='background:url("+bg.value+")'>"
+
++ html.value +
+
+"</div>";
+
+}
+
+
+
+window.bold=function(){
+
+html.value+="<b>טקסט</b>";
+
+update();
+
+}
+
+
+window.italic=function(){
+
+html.value+="<i>טקסט</i>";
+
+update();
+
+}
+
+
+window.center=function(){
+
+html.value+="<div style='text-align:center'>טקסט</div>";
+
+update();
+
+}
+
+
+window.big=function(){
+
+html.value+="<h2>כותרת</h2>";
+
+update();
+
+}
+
+
+window.img=function(){
+
+let u=prompt("קישור");
+
+html.value+="<img src='"+u+"' width=200>";
+
+update();
+
+}
+
+
+
+window.save=async function(){
+
+await setDoc(doc(db,"sites",user),{
+
+name:siteName.value,
+html:html.value,
+bg:bg.value,
+owner:user
+
+});
+
+alert("נשמר");
+
+}
+
+
+
+window.openSite=function(){
+
+location="site.html?id="+user;
+
+}
+
+
+
+</script>
+
+
+</body>
+</html>
