@@ -26,6 +26,32 @@ body{font-family:Varela Round;text-align:center;}
 .ql-font-VarelaRound{font-family:"Varela Round";}
 .ql-font-GveretLevin{font-family:"Gveret Levin";}
 
+  .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="VarelaRound"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="VarelaRound"]::before {
+content: "Varela Round";
+font-family: "Varela Round";
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="GveretLevin"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="GveretLevin"]::before {
+content: "Gveret Levin";
+font-family: "Gveret Levin";
+}
+
+
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="8px"]::before {content:"8";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="10px"]::before {content:"10";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="12px"]::before {content:"12";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="14px"]::before {content:"14";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="16px"]::before {content:"16";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="18px"]::before {content:"18";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="24px"]::before {content:"24";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="32px"]::before {content:"32";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="48px"]::before {content:"48";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="60px"]::before {content:"60";}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="72px"]::before {content:"72";}
+
 </style>
 
 </head>
@@ -100,13 +126,20 @@ theme:"snow",
 modules:{
 toolbar:[
 
-[{font:[
-{label:"Varela Round",value:"VarelaRound"},
-{label:"Gveret Levin",value:"GveretLevin"},
-"serif","sans-serif"
-]}],
+[{ font: ["VarelaRound","GveretLevin","serif","sans-serif"] }],
 
-[{size:["8px","10px","12px","14px","16px","18px","24px","32px","48px","60px","72px"]}],
+[{ size: ["8px","10px","12px","14px","16px","18px","24px","32px","48px","60px","72px"] }],
+
+["bold","italic","underline"],
+
+[{ color: [] }],
+
+[{ align: [] }],
+
+["image"]
+
+]
+}
 
 ["bold","italic","underline"],
 [{color:[]}],
