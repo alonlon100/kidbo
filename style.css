@@ -64,6 +64,7 @@ display:inline-block;
 width:250px;
 vertical-align:top;
 height:160px;
+overflow:hidden;
 
 }
 
@@ -107,3 +108,12 @@ z-index:-1;
 
 #left{left:0;}
 #right{right:0;}
+
+
+
+#sites{
+
+max-height:140px;
+overflow-y:auto;
+
+}
