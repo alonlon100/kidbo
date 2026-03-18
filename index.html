@@ -155,14 +155,14 @@ getDoc,
 collection,
 getDocs,
 deleteDoc
-} from "./firebase.js?v=2";
+} from "./firebase.js";
 
 
 
 window.register = async function(){
 
-let u = document.getElementById("regUser").value.trim();
-let p = document.getElementById("regPass").value.trim();
+let u = regUser.value.trim();
+let p = regPass.value.trim();
 
 if(!u || !p){
 alert("צריך שם וסיסמה");
@@ -186,8 +186,8 @@ location.href="editor.html";
 
 window.login = async function(){
 
-let u = document.getElementById("logUser").value.trim();
-let p = document.getElementById("logPass").value.trim();
+let u = logUser.value.trim();
+let p = logPass.value.trim();
 
 let snap = await getDoc(
 doc(db,"users",u)
