@@ -14,10 +14,6 @@
 
 <script type="module" src="firebase.js"></script>
 
-<!-- PICKR -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/>
-<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
-
 <style>
 
 body{font-family:Varela Round;text-align:center;}
@@ -80,9 +76,12 @@ Size.whitelist=["8px","10px","12px","14px","16px","18px","24px","32px","48px","6
 Quill.register(Size,true);
 
 
-// ===== toolbar handler =====
+let quill=new Quill("#editor",{
 
-let toolbarOptions = [
+theme:"snow",
+
+modules:{
+toolbar:[
 
 [{font:["VarelaRound","GveretLevin","serif","sans-serif"]}],
 
@@ -90,78 +89,17 @@ let toolbarOptions = [
 
 ["bold","italic","underline"],
 
-["colorPicker"],
+[{color:[]}],   // צבע חופשי
 
 [{align:[]}],
 
 ["image"]
 
-];
-
-
-
-let quill=new Quill("#editor",{
-
-theme:"snow",
-
-modules:{
-toolbar:{
-container:toolbarOptions,
-handlers:{
-colorPicker:function(){
-
-pickr.show();
-
-}
-}
-}
-
+]
 }
 
 });
 
-
-
-// ===== PICKR =====
-
-const pickr = Pickr.create({
-
-el: document.body,
-
-theme: 'classic',
-
-default: '#000000',
-
-components: {
-
-preview: true,
-opacity: true,
-hue: true,
-
-interaction: {
-hex: true,
-rgba: true,
-input: true,
-save: true
-}
-
-}
-
-});
-
-pickr.on('save', (color) => {
-
-let c=color.toHEXA().toString();
-
-quill.format("color",c);
-
-pickr.hide();
-
-});
-
-
-
-// ===== BACKGROUNDS =====
 
 let bgs=[
 "https://i.ibb.co/4wXF4Jh5/514971w649bnc4h7.gif",
