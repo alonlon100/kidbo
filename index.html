@@ -194,47 +194,26 @@ location="editor.html";
 
 
 
-window.login = async function(){
+window.register = async function(){
 
-let u=logUser.value;
-let p=logPass.value;
+let u = regUser.value.trim();
+let p = regPass.value.trim();
 
-let snap =
-await getDoc(doc(db,"users",u));
-
-if(!snap.exists()) return;
-
-if(snap.data().password!=p) return;
-
-localStorage.user=u;
-
-location="editor.html";
-
-};
-
-
-
-window.adminLogin=function(){
-
-if(adminPass.value=="אלון666"){
-
-localStorage.admin="yes";
-
-alert("מנהל");
-
-loadSites();
-
+if(!u || !p){
+alert("צריך שם וסיסמה");
+return;
 }
 
-};
+await setDoc(
+doc(db,"users",u),
+{password:p}
+);
 
+localStorage.setItem("user",u);
 
+alert("נרשמת בהצלחה");
 
-window.logout=function(){
-
-localStorage.clear();
-
-location.reload();
+location.href = "editor.html";
 
 };
 
