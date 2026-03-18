@@ -5,164 +5,49 @@
 
 <meta charset="UTF-8">
 
-<title>אתר</title>
+<title>האתר</title>
 
 <link rel="stylesheet" href="style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
-
-  <script type="module" src="firebase.js"></script>
+<script type="module" src="firebase.js"></script>
 
 </head>
 
-
 <body>
-
-<div class="main">
 
 <div id="site"></div>
 
-<hr>
-
-<h3>תגובות</h3>
-
-<div id="comments"></div>
-
-<input id="cText">
-
-<button onclick="send()">שלח</button>
-
-<br><br>
-
-<button onclick="back()">חזרה לעורך</button>
-
-</div>
-
-
 <script type="module">
 
-
 import {
-
 db,
-collection,
 doc,
-getDoc,
-getDocs,
-addDoc,
-deleteDoc
+getDoc
+} from "./firebase.js";
 
-}
-from "./firebase.js";
+const ref = doc(db, "site", "main");
 
+async function load() {
 
-let params=new URLSearchParams(location.search);
+const snap = await getDoc(ref);
 
-let id=params.get("id");
+if (snap.exists()) {
 
-let user=localStorage.user;
+let data = snap.data();
 
-let admin=false;
-
-
-
-if(user=="אלון"){
-admin=true;
-}
-
-
-
-async function loadSite(){
-
-let snap=await getDoc(doc(db,"sites",id));
-
-let s=snap.data();
-
-site.innerHTML=
-
-"<div style='background:url("+s.bg+")'>"
-
-+ s.html +
-
+site.innerHTML =
+"<div style='background:url(" + data.bg + ")'>" +
+"<h1>" + data.name + "</h1>" +
+data.html +
 "</div>";
 
 }
 
-
-async function loadComments(){
-
-comments.innerHTML="";
-
-let q=await getDocs(collection(db,"comments"));
-
-q.forEach(d=>{
-
-let c=d.data();
-
-if(c.site!=id) return;
-
-let div=document.createElement("div");
-
-div.innerHTML=c.user+" : "+c.text;
-
-if(admin){
-
-let b=document.createElement("button");
-
-b.innerText="מחק";
-
-b.onclick=async()=>{
-
-await deleteDoc(doc(db,"comments",d.id));
-
-loadComments();
-
-};
-
-div.appendChild(b);
-
 }
 
-comments.appendChild(div);
-
-});
-
-}
-
-
-window.send=async function(){
-
-if(!user) return;
-
-await addDoc(collection(db,"comments"),{
-
-site:id,
-user:user,
-text:cText.value
-
-});
-
-cText.value="";
-
-loadComments();
-
-}
-
-
-window.back=function(){
-
-location="editor.html";
-
-}
-
-
-loadSite();
-
-loadComments();
-
+load();
 
 </script>
-
 
 </body>
 </html>
