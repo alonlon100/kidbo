@@ -872,7 +872,10 @@ document
       setCurrentUser(user);
 
       alert("נכנסת");
-location.hash = "editor";
+
+document.getElementById("editor-section").style.display = "block";
+document.getElementById("home-section").style.display = "none";
+      
     }
   );
 
