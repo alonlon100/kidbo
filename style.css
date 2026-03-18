@@ -106,3 +106,14 @@ z-index:-1;
 
 #left{left:0;}
 #right{right:0;}
+
+
+/* ===== תיקון קטן ל-Normal ו-Sans בעורך ===== */
+
+.ql-picker.ql-font .ql-picker-label::before{
+content:attr(data-value);
+}
+
+.ql-picker.ql-size .ql-picker-label::before{
+content:attr(data-value);
+}
