@@ -5,41 +5,34 @@
 
 <meta charset="UTF-8">
 
-<title>עורך האתר</title>
-
-<link rel="stylesheet" href="style.css">
+<title>עורך</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Gveret+Levin&display=swap" rel="stylesheet">
-
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-<script type="module" src="firebase.js"></script>
 
 <style>
 
 body{
-font-family: Varela Round;
+font-family:Varela Round;
+background:#f0f0f0;
 text-align:center;
 }
 
-.main{
+.top{
 background:white;
-width:700px;
+padding:10px;
+}
+
+.editor{
+background:white;
+width:800px;
 margin:auto;
-padding:20px;
+padding:10px;
+min-height:300px;
+border:1px solid #ccc;
 }
 
-#bgSelect img{
-width:80px;
+button{
 margin:5px;
-cursor:pointer;
-border:3px solid transparent;
-}
-
-#bgSelect img:hover{
-border:3px solid #00a9ff;
 }
 
 </style>
@@ -48,40 +41,72 @@ border:3px solid #00a9ff;
 
 <body>
 
-<div class="main">
+<div class="top">
 
-<h2 style="font-family:Gveret Levin;color:#00a9ff">
-עורך האתר
-</h2>
-
-שם האתר
-
+שם אתר
 <br>
-
-<input id="siteName">
+<input id="name">
 
 <br><br>
 
-בחירת רקע
+פונט
+<br>
 
-<div id="bgSelect"></div>
+<select id="font">
+
+<option value="Varela Round">Varela Round</option>
+<option value="Arial">Arial</option>
+<option value="David">David</option>
+<option value="Courier New">Courier</option>
+<option value="Gveret Levin">Gveret Levin</option>
+
+</select>
 
 <br>
 
-<div id="editor" style="height:300px"></div>
+צבע
+<br>
+
+<input type="color" id="color">
+
+<br><br>
+
+רקע
 
 <br>
 
-<button onclick="save()">שמירה</button>
+<select id="bg">
 
-<button onclick="openSite()">מעבר לאתר</button>
+<option value="https://i.ibb.co/0yqG7wH/bg1.png">1</option>
+<option value="https://i.ibb.co/tq0Q5kK/bg2.png">2</option>
+<option value="https://i.ibb.co/7Qpks9m/bg3.png">3</option>
+<option value="https://i.ibb.co/5k5Wz9g/bg4.png">4</option>
 
-<button onclick="logout()">התנתקות</button>
+</select>
 
-<button onclick="deleteUser()">
-מחיקת משתמש והאתר
+<br><br>
+
+<button onclick="save()">
+שמור
 </button>
 
+<button onclick="logout()">
+התנתק
+</button>
+
+<button onclick="delUser()">
+מחק משתמש
+</button>
+
+</div>
+
+
+<div
+contenteditable
+id="editor"
+class="editor"
+>
+כתוב כאן
 </div>
 
 
@@ -97,80 +122,31 @@ deleteDoc
 } from "./firebase.js?v=2";
 
 
-let user = localStorage.user;
+let user = localStorage.getItem("user");
 
-if(!user) location="index.html";
-
-
-let quill = new Quill('#editor', {
-
-theme:'snow',
-
-modules:{
-toolbar:[
-
-[{font:[]}],
-
-[{size:['small',false,'large','huge']}],
-
-['bold','italic','underline'],
-
-[{color:[]}],
-
-[{align:[]}],
-
-['image']
-
-]
-
+if(!user){
+location.href="index.html";
 }
 
-});
-
-
-
-let bgs=[
-
-"https://i.ibb.co/4wXF4Jh5/514971w649bnc4h7.gif",
-"https://i.ibb.co/xKSFXQ6p/1028701nidgo5cnnh.gif",
-"https://i.ibb.co/GQRtGjbP/1301959bqir6wvcvv.gif",
-"https://i.ibb.co/VpWKtQ9z/1254492hl9oznlwgq.gif",
-"https://i.ibb.co/v4YFzCGH/1253900io7iftppfb.gif"
-
-];
-
-
-let bg="";
-
-
-bgs.forEach(u=>{
-
-let img=document.createElement("img");
-
-img.src=u;
-
-img.onclick=()=>bg=u;
-
-bgSelect.appendChild(img);
-
-});
-
-
-
-const ref = doc(db,"sites",user);
 
 
 window.save = async function(){
 
-await setDoc(ref,{
+let name = nameInput.value;
+let font = fontSelect.value;
+let color = colorInput.value;
+let bg = bgSelect.value;
 
-name: siteName.value,
-
-html: quill.root.innerHTML,
-
+await setDoc(
+doc(db,"sites",user),
+{
+html: editor.innerHTML,
+name:name,
+font:font,
+color:color,
 bg:bg
-
-});
+}
+);
 
 alert("נשמר");
 
@@ -178,58 +154,34 @@ alert("נשמר");
 
 
 
-async function load(){
-
-let snap=await getDoc(ref);
-
-if(snap.exists()){
-
-siteName.value=snap.data().name;
-
-quill.root.innerHTML=snap.data().html;
-
-bg=snap.data().bg;
-
-}
-
-}
-
-load();
-
-
-
-window.openSite=function(){
-
-location="site.html?u="+user;
-
-};
-
-
-
 window.logout=function(){
 
-localStorage.removeItem("user");
-
-location="index.html";
+localStorage.clear();
+location.href="index.html";
 
 };
 
 
 
-window.deleteUser=async function(){
-
-await deleteDoc(doc(db,"users",user));
+window.delUser = async function(){
 
 await deleteDoc(doc(db,"sites",user));
+await deleteDoc(doc(db,"users",user));
 
-localStorage.removeItem("user");
+localStorage.clear();
 
-location="index.html";
+location.href="index.html";
 
 };
+
+
+
+let nameInput = document.getElementById("name");
+let fontSelect = document.getElementById("font");
+let colorInput = document.getElementById("color");
+let bgSelect = document.getElementById("bg");
 
 </script>
 
 </body>
-
 </html>
