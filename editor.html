@@ -68,29 +68,13 @@ if(!user)location="index.html";
 
 
 let Font=Quill.import("formats/font");
-
 Font.whitelist=["VarelaRound","GveretLevin","serif","sans-serif"];
-
 Quill.register(Font,true);
 
+let Size=Quill.import("attributors/class/size");
+Size.whitelist=["8px","10px","12px","14px","16px","18px","24px","32px","48px","60px","72px"];
+Quill.register(Size,true);
 
-var Size = Quill.import('attributors/class/size');
-
-Size.whitelist = [
-"8px",
-"10px",
-"12px",
-"14px",
-"16px",
-"18px",
-"24px",
-"32px",
-"48px",
-"60px",
-"72px"
-];
-
-Quill.register(Size, true);
 
 let quill=new Quill("#editor",{
 
@@ -99,17 +83,16 @@ theme:"snow",
 modules:{
 toolbar:[
 
-[{font:[
-{label:"Varela Round",value:"VarelaRound"},
-{label:"Gveret Levin",value:"GveretLevin"},
-"serif","sans-serif"
-]}],
+[{font:["VarelaRound","GveretLevin","serif","sans-serif"]}],
 
 [{size:["8px","10px","12px","14px","16px","18px","24px","32px","48px","60px","72px"]}],
 
 ["bold","italic","underline"],
-[{color:[]}],
+
+[{color:[]}],   // צבע חופשי
+
 [{align:[]}],
+
 ["image"]
 
 ]
