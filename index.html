@@ -279,6 +279,57 @@ sites.appendChild(div);
 
 loadSites();
 
+
+
+  window.register = async function(){
+
+let u = document.getElementById("regUser").value.trim();
+let p = document.getElementById("regPass").value.trim();
+
+if(!u || !p){
+alert("צריך שם וסיסמה");
+return;
+}
+
+await setDoc(
+doc(db,"users",u),
+{password:p}
+);
+
+localStorage.setItem("user",u);
+
+alert("נרשמת בהצלחה");
+
+location.href = "editor.html";
+
+};
+
+
+
+window.login = async function(){
+
+let u = document.getElementById("logUser").value.trim();
+let p = document.getElementById("logPass").value.trim();
+
+let snap =
+await getDoc(doc(db,"users",u));
+
+if(!snap.exists()){
+alert("משתמש לא קיים");
+return;
+}
+
+if(snap.data().password != p){
+alert("סיסמה שגויה");
+return;
+}
+
+localStorage.setItem("user",u);
+
+location.href = "editor.html";
+
+};
+
 </script>
 
 </body>
