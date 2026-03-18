@@ -94,12 +94,21 @@ theme:"snow",
 
 modules:{
 toolbar:[
+
 [{font:[]}],
+
 [{size:[]}],
+
 ["bold","italic","underline"],
+
 [{color:[]}],
+
 [{align:[]}],
-["image"]
+
+["image"],
+
+["colorPicker"]
+
 ]
 }
 
@@ -107,12 +116,40 @@ toolbar:[
 
 
 
+// ===== COLOR PICKER =====
+
+let input = document.createElement("input");
+input.type = "color";
+input.style.display = "none";
+
+document.body.appendChild(input);
+
+let toolbar = quill.getModule("toolbar");
+
+toolbar.addHandler("colorPicker", function () {
+
+input.click();
+
+});
+
+input.addEventListener("input", function () {
+
+quill.format("color", input.value);
+
+});
+
+
+
+// רקעים
+
 let bgs=[
+
 "https://i.ibb.co/4wXF4Jh5/514971w649bnc4h7.gif",
 "https://i.ibb.co/xKSFXQ6p/1028701nidgo5cnnh.gif",
 "https://i.ibb.co/GQRtGjbP/1301959bqir6wvcvv.gif",
 "https://i.ibb.co/VpWKtQ9z/1254492hl9oznlwgq.gif",
 "https://i.ibb.co/v4YFzCGH/1253900io7iftppfb.gif"
+
 ];
 
 let bg="";
