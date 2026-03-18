@@ -6,8 +6,10 @@ doc,
 setDoc,
 getDoc,
 getDocs,
+deleteDoc,
 collection
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -30,5 +32,6 @@ doc,
 setDoc,
 getDoc,
 getDocs,
+deleteDoc,
 collection
 };
