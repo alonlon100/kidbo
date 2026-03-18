@@ -42,6 +42,14 @@ border:3px solid transparent;
 border:3px solid #00a9ff;
 }
 
+.ql-font-Gveret\ Levin{
+font-family:"Gveret Levin";
+}
+
+.ql-font-Varela\ Round{
+font-family:"Varela Round";
+}
+
 </style>
 
 </head>
@@ -55,15 +63,12 @@ border:3px solid #00a9ff;
 </h2>
 
 שם האתר
-
 <br>
-
 <input id="siteName">
 
 <br><br>
 
 בחירת רקע
-
 <div id="bgSelect"></div>
 
 <br>
@@ -73,9 +78,7 @@ border:3px solid #00a9ff;
 <br>
 
 <button onclick="save()">שמירה</button>
-
 <button onclick="openSite()">מעבר לאתר</button>
-
 <button onclick="logout()">התנתקות</button>
 
 <button onclick="deleteUser()">
@@ -109,7 +112,13 @@ theme:'snow',
 modules:{
 toolbar:[
 
-[{font:[]}],
+[{font:[
+"Varela Round",
+"Gveret Levin",
+"serif",
+"sans-serif",
+"monospace"
+]}],
 
 [{size:['small',false,'large','huge']}],
 
@@ -156,7 +165,6 @@ bgSelect.appendChild(img);
 });
 
 
-
 const ref = doc(db,"sites",user);
 
 
@@ -175,7 +183,6 @@ bg:bg
 alert("נשמר");
 
 };
-
 
 
 async function load(){
@@ -197,13 +204,11 @@ bg=snap.data().bg;
 load();
 
 
-
 window.openSite=function(){
 
 location="site.html?u="+user;
 
 };
-
 
 
 window.logout=function(){
@@ -213,7 +218,6 @@ localStorage.removeItem("user");
 location="index.html";
 
 };
-
 
 
 window.deleteUser=async function(){
@@ -231,5 +235,4 @@ location="index.html";
 </script>
 
 </body>
-
 </html>
