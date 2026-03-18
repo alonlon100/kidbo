@@ -87,6 +87,19 @@ location="index.html";
 }
 
 
+let Font = Quill.import("formats/font");
+
+Font.whitelist = [
+"VarelaRound",
+"GveretLevin",
+"serif",
+"sans-serif"
+];
+
+Quill.register(Font, true);
+
+
+  
 
 let quill = new Quill("#editor",{
 
@@ -94,7 +107,7 @@ theme:"snow",
 
 modules:{
 toolbar:[
-[{font:[]}],
+[{font:["VarelaRound","GveretLevin","serif","sans-serif"]}],
 [{size:[]}],
 ["bold","italic","underline"],
 [{color:[]}],
