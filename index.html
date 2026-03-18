@@ -1,22 +1,76 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html dir="rtl" lang="he">
 
 <head>
 
 <meta charset="UTF-8">
 
-<title>קידבו - מערכת חינמית לבניית אתרים לילדים</title>
+<title>קידבו</title>
 
 <link rel="stylesheet" href="style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
-
-<link href="https://fonts.googleapis.com/css2?family=Gveret+Levin&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Gveret+Levin&display=swap" rel="stylesheet">
 
 <script type="module" src="firebase.js"></script>
 
-</head>
+<style>
 
+body{
+
+font-family:Varela Round;
+text-align:center;
+
+background:url(https://i.ibb.co/nMmWgCMg/atar.png);
+background-repeat:repeat;
+animation:bg 20s linear infinite;
+
+}
+
+@keyframes bg{
+
+from{background-position:0 0}
+to{background-position:500px 0}
+
+}
+
+.main{
+
+background:white;
+width:600px;
+margin:auto;
+padding:20px;
+
+}
+
+h1{
+
+font-family:Gveret Levin;
+color:#00a9ff;
+
+}
+
+button{
+
+background:#00a9ff;
+color:white;
+border:none;
+padding:10px;
+margin:5px;
+cursor:pointer;
+
+}
+
+.box{
+
+border:1px solid #ccc;
+padding:10px;
+margin:10px;
+
+}
+
+</style>
+
+</head>
 
 <body>
 
@@ -24,75 +78,117 @@
 
 <img src="https://i.ibb.co/pjg57JfN/logo-2.png" width="200">
 
-<h1>קידבו - מערכת חינמית לבניית אתרים לילדים</h1>
+<h1>
+קידבו - מערכת חינמית לבניית אתרים לילדים
+</h1>
 
 
 <div class="box">
 
-<h3>הרשמה</h3>
+הרשמה
 
-<input id="regUser" placeholder="שם משתמש"><br>
-<input id="regPass" type="password" placeholder="סיסמה"><br>
+<br>
 
-<button onclick="register()">הרשמה</button>
+<input id="regUser" placeholder="שם משתמש">
+
+<br>
+
+<input id="regPass" placeholder="סיסמה">
+
+<br>
+
+<button onclick="register()">
+הרשמה
+</button>
 
 </div>
 
 
+
 <div class="box">
 
-<h3>התחברות</h3>
+התחברות
 
-<input id="logUser"><br>
-<input id="logPass" type="password"><br>
+<br>
 
-<button onclick="login()">התחברות</button>
+<input id="logUser">
+
+<br>
+
+<input id="logPass">
+
+<br>
+
+<button onclick="login()">
+התחברות
+</button>
 
 </div>
 
 
+
 <div class="box">
 
-<h3>אתרים שנבנו</h3>
+אתרים שנבנו
 
 <div id="sites"></div>
 
 </div>
 
 
+<div class="box">
+
+התחברות הנהלה
+
+<br>
+
+<input id="adminPass">
+
+<button onclick="adminLogin()">
+כניסה
+</button>
+
+<button onclick="logout()">
+ניתוק
+</button>
+
 </div>
+
+</div>
+
 
 
 <script type="module">
 
 import {
+
 db,
-collection,
 doc,
 setDoc,
 getDoc,
-getDocs
-}
-from "./firebase.js";
+collection,
+getDocs,
+deleteDoc
+
+} from "./firebase.js";
+
 
 
 window.register = async function(){
 
-let u = regUser.value;
-let p = regPass.value;
+let u=regUser.value;
+let p=regPass.value;
 
-if(!u || !p){
-alert("חסר");
-return;
-}
+await setDoc(
+doc(db,"users",u),
+{password:p}
+);
 
-await setDoc(doc(db,"users",u),{
-password:p
-});
+alert("נרשמת");
 
-localStorage.user = u;
+localStorage.user=u;
 
-location = "editor.html";
+location="editor.html";
 
 };
 
@@ -100,50 +196,103 @@ location = "editor.html";
 
 window.login = async function(){
 
-let u = document.getElementById("logUser").value;
-let p = document.getElementById("logPass").value;
+let u=logUser.value;
+let p=logPass.value;
 
-const ref = doc(db,"users",u);
+let snap =
+await getDoc(doc(db,"users",u));
 
-const snap = await getDoc(ref);
+if(!snap.exists()) return;
 
-if(!snap.exists()){
-alert("משתמש לא קיים");
-return;
+if(snap.data().password!=p) return;
+
+localStorage.user=u;
+
+location="editor.html";
+
+};
+
+
+
+window.adminLogin=function(){
+
+if(adminPass.value=="אלון666"){
+
+localStorage.admin="yes";
+
+alert("מנהל");
+
+loadSites();
+
 }
 
-if(snap.data().password !== p){
-alert("סיסמה שגויה");
-return;
-}
+};
 
-localStorage.setItem("user",u);
 
-location.href = "editor.html";
 
-}
+window.logout=function(){
+
+localStorage.clear();
+
+location.reload();
+
+};
 
 
 
 async function loadSites(){
 
-sites.innerHTML = "";
+sites.innerHTML="";
 
-let q = await getDocs(collection(db,"site"));
+let q = await getDocs(
+collection(db,"sites")
+);
 
-q.forEach(d => {
+q.forEach(d=>{
 
-let b = document.createElement("button");
+let div=document.createElement("div");
 
-b.innerText = "אתר";
+let u=d.id;
 
-b.onclick = () => {
+div.innerHTML=
 
-location = "site.html";
+d.data().name+
+
+" <button>כניסה</button>";
+
+div.querySelector("button")
+.onclick=()=>{
+
+location=
+"site.html?u="+u;
 
 };
 
-sites.appendChild(b);
+if(localStorage.admin){
+
+let del=document.createElement("button");
+
+del.innerText="מחק";
+
+del.onclick=async()=>{
+
+await deleteDoc(
+doc(db,"sites",u)
+);
+
+await deleteDoc(
+doc(db,"users",u)
+);
+
+loadSites();
+
+};
+
+div.appendChild(del);
+
+}
+
+sites.appendChild(div);
 
 });
 
@@ -153,6 +302,6 @@ loadSites();
 
 </script>
 
-
 </body>
+
 </html>
