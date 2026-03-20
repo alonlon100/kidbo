@@ -200,8 +200,13 @@ overflow-y:auto;
 
 <h2>התחברות הנהלה</h2>
 
+<input id="adminUser" placeholder="אימייל מנהל">
 
-<input type="password" id="adminPass">
+<br>
+
+<input type="password" id="adminPass" placeholder="סיסמה">
+
+<br>
 
 <button onclick="adminLogin()">
 כניסה
@@ -339,7 +344,7 @@ const auth = getAuth();
 
 window.adminLogin = function () {
 
-let email = prompt("אימייל מנהל");
+let email = adminUser.value;
 let pass = adminPass.value;
 
 signInWithEmailAndPassword(auth, email, pass)
