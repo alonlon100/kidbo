@@ -5,6 +5,17 @@ text-align:center;
 overflow-x:hidden;
 }
 
+
+input,
+button,
+select,
+textarea{
+font-family:'Varela Round', sans-serif;
+}
+
+
+
+
 /* רקע זז */
 
 body::before{
