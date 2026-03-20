@@ -330,17 +330,35 @@ location.href="editor.html";
 
 
 
-window.adminLogin=function(){
+import {
+getAuth,
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-if(adminPass.value=="אלון666"){
+const auth = getAuth();
 
-localStorage.admin="yes";
+window.adminLogin = function () {
 
-alert("מנהל");
+let email = prompt("אימייל מנהל");
+let pass = adminPass.value;
+
+signInWithEmailAndPassword(auth, email, pass)
+
+.then(() => {
+
+localStorage.admin = "yes";
+
+alert("מנהל התחבר");
 
 loadSites();
 
-}
+})
+
+.catch(() => {
+
+alert("אימייל או סיסמה שגויים");
+
+});
 
 };
 
