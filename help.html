@@ -193,7 +193,7 @@ load();
 
 
 <script>
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
 
   const isAdmin = localStorage.getItem("admin");
 
@@ -201,13 +201,47 @@ window.addEventListener("load", () => {
 
     const wrap = document.getElementById("adminEditWrap");
     const btn = document.getElementById("editBtn");
+    const content = document.getElementById("content");
 
-    if (wrap && btn) {
+    if (wrap && btn && content) {
 
       wrap.style.display = "block";
 
       btn.onclick = () => {
-        window.location.href = "help_editor.html";
+
+        const html = content.innerHTML;
+
+        content.innerHTML = `
+          <textarea id="editor"
+          style="width:100%;height:300px;font-size:16px">
+${html}
+          </textarea>
+
+          <br><br>
+
+          <button id="saveBtn">
+          שמור
+          </button>
+        `;
+
+        document.getElementById("saveBtn").onclick =
+        async () => {
+
+          const newHtml =
+          document.getElementById("editor").value;
+
+          const { db, doc, setDoc }
+          = await import("./firebase.js");
+
+          await setDoc(
+            doc(db,"pages","help"),
+            { html:newHtml }
+          );
+
+          location.reload();
+
+        };
+
       };
 
     }
