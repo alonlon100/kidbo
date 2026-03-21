@@ -98,6 +98,31 @@ background:#9eddff;
 transform:scale(1.05);
 }
 
+
+
+.ql-font-varela{
+font-family:"Varela Round";
+}
+
+.ql-font-gveret{
+font-family:"Gveret Levin";
+}
+
+.ql-picker.ql-font .ql-picker-item[data-value="varela"]::before{
+content:"Varela Round";
+font-family:"Varela Round";
+}
+
+.ql-picker.ql-font .ql-picker-item[data-value="gveret"]::before{
+content:"Gveret Levin";
+font-family:"Gveret Levin";
+}
+
+
+
+
+  
+
 </style>
 
 
@@ -218,15 +243,32 @@ window.addEventListener("load", () => {
       content.innerHTML = `
 
         <div id="toolbar">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
 
-          <select class="ql-color"></select>
-          <select class="ql-background"></select>
+<span class="ql-formats">
+<select class="ql-font"></select>
+<select class="ql-size"></select>
+</span>
 
-          <button class="ql-image"></button>
-        </div>
+<span class="ql-formats">
+<button class="ql-bold"></button>
+<button class="ql-italic"></button>
+<button class="ql-underline"></button>
+</span>
+
+<span class="ql-formats">
+<select class="ql-color"></select>
+<select class="ql-background"></select>
+</span>
+
+<span class="ql-formats">
+<select class="ql-align"></select>
+</span>
+
+<span class="ql-formats">
+<button class="ql-image"></button>
+</span>
+
+</div>
 
         <div id="editor" style="height:300px"></div>
 
@@ -235,6 +277,22 @@ window.addEventListener("load", () => {
 
       `;
 
+
+const Font = Quill.import('formats/font');
+
+Font.whitelist = [
+'sans-serif',
+'serif',
+'monospace',
+'varela',
+'gveret'
+];
+
+Quill.register(Font, true);
+
+
+
+      
       const quill = new Quill("#editor", {
         theme: "snow",
         modules: { toolbar: "#toolbar" }
