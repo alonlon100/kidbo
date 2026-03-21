@@ -100,6 +100,12 @@ transform:scale(1.05);
 
 </style>
 
+
+
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  
+
 </head>
 
 
@@ -201,7 +207,7 @@ window.addEventListener("load", () => {
   const btn = document.getElementById("editBtn");
   const content = document.getElementById("content");
 
-  if (isAdmin === "yes" && wrap && btn && content) {
+  if (isAdmin === "yes") {
 
     wrap.style.display = "block";
 
@@ -210,30 +216,40 @@ window.addEventListener("load", () => {
       const html = content.innerHTML;
 
       content.innerHTML = `
-        <textarea id="editor"
-        style="width:100%;height:300px">
-${html}
-        </textarea>
 
-        <br><br>
+        <div id="toolbar">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
 
-        <button id="saveBtn">
-        שמור
-        </button>
+          <select class="ql-color"></select>
+          <select class="ql-background"></select>
+
+          <button class="ql-image"></button>
+        </div>
+
+        <div id="editor" style="height:300px"></div>
+
+        <br>
+        <button id="saveBtn">שמור</button>
+
       `;
+
+      const quill = new Quill("#editor", {
+        theme: "snow",
+        modules: { toolbar: "#toolbar" }
+      });
+
+      quill.root.innerHTML = html;
 
       document.getElementById("saveBtn").onclick =
       async () => {
 
-        const newHtml =
-        document.getElementById("editor").value;
-
-        const mod =
-        await import("./firebase.js");
+        const mod = await import("./firebase.js");
 
         await mod.setDoc(
           mod.doc(mod.db,"pages","help"),
-          { html:newHtml }
+          { html: quill.root.innerHTML }
         );
 
         alert("נשמר");
