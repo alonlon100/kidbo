@@ -200,9 +200,7 @@ load();
 
 
 
-<script type="module">
-import { auth } from "./firebase.js";
-
+<script>
 window.addEventListener("load", () => {
 
   const isAdmin = localStorage.getItem("admin");
@@ -210,6 +208,7 @@ window.addEventListener("load", () => {
   if (isAdmin === "yes") {
 
     const btn = document.createElement("button");
+
     btn.innerText = "ערוך עמוד";
     btn.style.position = "fixed";
     btn.style.bottom = "20px";
@@ -228,10 +227,6 @@ window.addEventListener("load", () => {
 
     document.body.appendChild(btn);
 
-    console.log("ADMIN BUTTON ADDED");
-
-  } else {
-    console.log("NOT ADMIN");
   }
 
 });
