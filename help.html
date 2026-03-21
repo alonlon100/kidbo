@@ -294,13 +294,31 @@ Quill.register(Font, true);
 
 
 
-      
-      const quill = new Quill("#editor", {
-        theme: "snow",
-        modules: { toolbar: "#toolbar" }
-      });
+const quill = new Quill("#editor", {
+  theme: "snow",
+  modules: {
+    toolbar: {
+      container: "#toolbar"
+    }
+  },
+  formats: [
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "color",
+    "background",
+    "align",
+    "image"
+  ]
+});
 
-      quill.root.innerHTML = html;
+
+
+
+      
+          quill.root.innerHTML = html;
 
       document.getElementById("saveBtn").onclick =
       async () => {
