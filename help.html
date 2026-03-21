@@ -16,7 +16,7 @@
 
 <style>
 
-/* ===== בדיוק כמו INDEX ===== */
+/* ===== אותו דבר כמו INDEX ===== */
 
 body{
 font-family:Varela Round;
@@ -37,6 +37,35 @@ background:white;
 width:600px;
 margin:auto;
 padding:20px;
+}
+
+h1{
+font-family:Gveret Levin;
+color:#00a9ff;
+}
+
+#kipo{
+animation: shake 3s infinite;
+}
+
+#kipo:hover{
+animation: shake 0.4s infinite;
+}
+
+@keyframes shake{
+
+0%{transform:translate(0,0) rotate(0deg)}
+10%{transform:translate(-2px,2px) rotate(-2deg)}
+20%{transform:translate(2px,-2px) rotate(2deg)}
+30%{transform:translate(-2px,2px) rotate(-2deg)}
+40%{transform:translate(2px,-2px) rotate(2deg)}
+50%{transform:translate(-2px,2px) rotate(-2deg)}
+60%{transform:translate(2px,-2px) rotate(2deg)}
+70%{transform:translate(-2px,2px) rotate(-1deg)}
+80%{transform:translate(2px,-2px) rotate(1deg)}
+90%{transform:translate(-1px,1px) rotate(0deg)}
+100%{transform:translate(0,0) rotate(0deg)}
+
 }
 
 .menu{
@@ -82,7 +111,7 @@ transform:scale(1.05);
 <img id="kipo" src="https://i.ibb.co/XwCp4rC/Kipo.png" width="300">
 
 <h1>
-עזרים ומדריכים לאתר האישי
+קיפו - מערכת חינמית לבניית אתרים לילדים
 </h1>
 
 
@@ -105,7 +134,10 @@ transform:scale(1.05);
 
 
 
-<h2>עזרים ומדריכים</h2>
+<h2>
+עזרים ומדריכים לאתר האישי
+</h2>
+
 
 <div id="content"></div>
 
@@ -164,7 +196,6 @@ snap.data().html;
 load();
 
 </script>
-
 
 
 </body>
