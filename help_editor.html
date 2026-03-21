@@ -111,11 +111,10 @@ getDoc
 } from "./firebase.js";
 
 
-let user = localStorage.getItem("user");
+let admin = localStorage.getItem("admin");
 
-
-if(user!="kipo"){
-location="index.html";
+if(admin !== "yes"){
+location = "index.html";
 }
 
 
