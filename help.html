@@ -5,7 +5,7 @@
 
 <meta charset="UTF-8">
 
-<title>עזרים ומדריכים</title>
+<title>עזרים ומדריכים לאתר האישי</title>
 
 <meta name="viewport" content="initial-scale=0.35">
 
@@ -138,6 +138,15 @@ transform:scale(1.05);
 עזרים ומדריכים לאתר האישי
 </h2>
 
+<div id="adminEditWrap" style="display:none; margin:20px 0;">
+  <button id="editBtn" class="menuBtn">
+    ערוך עמוד
+  </button>
+</div>
+
+
+
+  
 
 <div id="content"></div>
 
@@ -235,6 +244,34 @@ window.addEventListener("load", () => {
 
 
 
+<script>
+window.addEventListener("load", () => {
+
+  const isAdmin = localStorage.getItem("admin");
+
+  if (isAdmin === "yes") {
+
+    const wrap = document.getElementById("adminEditWrap");
+    const btn = document.getElementById("editBtn");
+
+    if (wrap && btn) {
+
+      wrap.style.display = "block";
+
+      btn.onclick = () => {
+        window.location.href = "help_editor.html";
+      };
+
+    }
+
+  }
+
+});
+</script>
+
+
+
+  
 
 
 
